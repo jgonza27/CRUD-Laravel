@@ -5,7 +5,7 @@
 ## Instalación
 
 ```bash
-git clone https://github.com/jesusgonzalvezgarcia10-ux/CRUD-Laravel.git
+git clone https://github.com/jgonza27/CRUD-LARAVEL.git
 
 cd CRUD-Laravel
 
