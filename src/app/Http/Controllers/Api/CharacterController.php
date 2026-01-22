@@ -1,0 +1,76 @@
+<?php
+
+namespace App\Http\Controllers\Api;
+
+use App\Http\Controllers\Controller;
+use App\Models\Character;
+use Illuminate\Http\Request;
+
+class CharacterController extends Controller
+{
+    // Listar todos los personajes
+    public function index()
+    {
+        return response()->json(Character::all());
+    }
+
+    // Crear un nuevo personaje
+    public function store(Request $request)
+    {
+        // Validamos que al menos tenga nombre y raza
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'race' => 'required|string|max:255',
+        ]);
+
+        $character = Character::create($request->all());
+
+        return response()->json([
+            'message' => '¡Personaje creado en la Tierra Media!',
+            'data' => $character
+        ], 201);
+    }
+
+    // Mostrar un personaje concreto
+    public function show(string $id)
+    {
+        $character = Character::find($id);
+
+        if (!$character) {
+            return response()->json(['message' => 'Personaje no encontrado'], 404);
+        }
+
+        return response()->json($character);
+    }
+
+    // Actualizar un personaje
+    public function update(Request $request, string $id)
+    {
+        $character = Character::find($id);
+
+        if (!$character) {
+            return response()->json(['message' => 'Personaje no encontrado'], 404);
+        }
+
+        $character->update($request->all());
+
+        return response()->json([
+            'message' => 'Personaje actualizado',
+            'data' => $character
+        ]);
+    }
+
+    // Eliminar un personaje
+    public function destroy(string $id)
+    {
+        $character = Character::find($id);
+
+        if (!$character) {
+            return response()->json(['message' => 'Personaje no encontrado'], 404);
+        }
+
+        $character->delete();
+
+        return response()->json(['message' => 'Personaje eliminado']);
+    }
+}
