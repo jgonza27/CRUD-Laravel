@@ -1,6 +1,6 @@
 FROM php:8.2-fpm
 
-# Instalar dependencias del sistema
+# Instalar dependencias del sistema y Node.js (Añadido)
 RUN apt-get update && apt-get install -y \
     git \
     curl \
@@ -12,6 +12,8 @@ RUN apt-get update && apt-get install -y \
     unzip \
     default-mysql-client \
     dos2unix \
+    && curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+    && apt-get install -y nodejs \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
@@ -27,12 +29,9 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # Establecer directorio de trabajo
 WORKDIR /var/www
 
-# Copiar script de entrada y convertir finales de línea
+# Copiar script de entrada
 COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN dos2unix /usr/local/bin/entrypoint.sh && chmod +x /usr/local/bin/entrypoint.sh
 
-# Exponer puerto 9000
 EXPOSE 9000
-
-# Usar el script de entrada
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
