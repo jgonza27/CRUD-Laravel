@@ -9,10 +9,17 @@ use Illuminate\Http\Request;
 class CharacterController extends Controller
 {
     // Listar todos los personajes
-    public function index()
-    {
-        return response()->json(Character::all());
+    public function index(Request $request)
+{
+    $query = Character::query();
+
+    // Si la URL trae ?race=Elf, filtramos
+    if ($request->has('race')) {
+        $query->where('race', $request->input('race'));
     }
+
+    return response()->json($query->paginate(15));
+}
 
     // Crear un nuevo personaje
     public function store(Request $request)
