@@ -45,20 +45,19 @@ class CharacterController extends Controller
 
     // Actualizar un personaje
     public function update(Request $request, string $id)
-    {
-        $character = Character::find($id);
+{
+    $character = Character::find($id);
+    if (!$character) { ... } // Tu código 404
 
-        if (!$character) {
-            return response()->json(['message' => 'Personaje no encontrado'], 404);
-        }
+    // Validar antes de actualizar (usamos 'sometimes' para que no sea obligatorio enviar todo)
+    $request->validate([
+        'name' => 'sometimes|required|string|max:255',
+        'race' => 'sometimes|required|string|max:255',
+    ]);
 
-        $character->update($request->all());
-
-        return response()->json([
-            'message' => 'Personaje actualizado',
-            'data' => $character
-        ]);
-    }
+    $character->update($request->all());
+    // ...
+}
 
     // Eliminar un personaje
     public function destroy(string $id)
