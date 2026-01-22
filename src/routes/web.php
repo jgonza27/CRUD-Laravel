@@ -1,41 +1,25 @@
 <?php
 
-use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
-// Página principal redirige a artículos
+// 1. Página Principal: Muestra la portada de la API (welcome.blade.php)
 Route::get('/', function () {
-    return redirect()->route('articles.index');
+    return view('welcome');
 });
 
-// Ruta de prueba para Eloquent (Actividad 4)
-Route::get('/articles/test', [ArticleController::class, 'test'])->name('articles.test');
-
-// Rutas públicas de artículos
-Route::get('/articles', [ArticleController::class, 'index'])->name('articles.index');
-Route::get('/articles/{id}', [ArticleController::class, 'show'])->name('articles.show')->where('id', '[0-9]+');
-
-// Rutas protegidas de artículos (requieren autenticación)
-Route::middleware('auth')->group(function () {
-    Route::get('/articles/mine', [ArticleController::class, 'mine'])->name('articles.mine');
-    Route::get('/articles/create', [ArticleController::class, 'create'])->name('articles.create');
-    Route::post('/articles', [ArticleController::class, 'store'])->name('articles.store');
-    Route::get('/articles/{id}/edit', [ArticleController::class, 'edit'])->name('articles.edit');
-    Route::put('/articles/{id}', [ArticleController::class, 'update'])->name('articles.update');
-    Route::delete('/articles/{id}', [ArticleController::class, 'destroy'])->name('articles.destroy');
-});
-
-// Dashboard redirige a artículos (después de login)
+// 2. Dashboard: Opcional, pero útil si mantienes usuarios. 
+// Lo dejamos apuntando a la vista por defecto de Laravel.
 Route::get('/dashboard', function () {
-    return redirect()->route('articles.index');
+    return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-// Rutas de perfil de usuario
+// 3. Rutas de Perfil (Autenticación): Las mantenemos por si quieres gestionar usuarios.
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+// 4. Rutas de autenticación (Login, Registro, etc.)
 require __DIR__.'/auth.php';
