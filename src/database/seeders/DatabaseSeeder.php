@@ -11,9 +11,9 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        // Aquí llamamos a nuestro seeder de personajes
         $this->call([
-            UserSeeder::class,
-            ArticleSeeder::class,
+            CharacterSeeder::class,
         ]);
     }
 }
