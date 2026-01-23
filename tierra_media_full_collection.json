@@ -1,0 +1,547 @@
+{
+    "info": {
+        "_postman_id": "b73f5f3a-9c2e-4b5d-8a1f-3d6e5c7a8b9c",
+        "name": "Tierra Media API - Completa (Incluye Opcionales)",
+        "description": "Colección completa para probar todos los endpoints de la API de Tierra Media, incluyendo los endpoints opcionales y de relaciones N:N.",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "1. Regiones",
+            "item": [
+                {
+                    "name": "Listar Regiones",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/regions",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "regions"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Crear Región",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "var jsonData = pm.response.json();",
+                                    "pm.environment.set(\"region_id\", jsonData.id);",
+                                    "pm.test(\"Status code is 201\", function () { pm.response.to.have.status(201); });"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"name\": \"Valinor\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/regions",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "regions"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Obtener Región",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/regions/{{region_id}}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "regions",
+                                "{{region_id}}"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Ver Criaturas de una Región (Opcional)",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/regions/{{region_id}}/creatures",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "regions",
+                                "{{region_id}}",
+                                "creatures"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "2. Reinos",
+            "item": [
+                {
+                    "name": "Listar Reinos",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/realms",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "realms"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Crear Reino",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "var jsonData = pm.response.json();",
+                                    "pm.environment.set(\"realm_id\", jsonData.id);",
+                                    "pm.test(\"Status code is 201\", function () { pm.response.to.have.status(201); });"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"name\": \"Reino de Prueba\",\n    \"ruler\": \"Rey Test\",\n    \"alignment\": \"Bien\",\n    \"region_id\": {{region_id}}\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/realms",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "realms"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Obtener Reino (con relaciones)",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/realms/{{realm_id}}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "realms",
+                                "{{realm_id}}"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Ver Héroes de un Reino (Opcional)",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/realms/{{realm_id}}/heroes",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "realms",
+                                "{{realm_id}}",
+                                "heroes"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "3. Héroes",
+            "item": [
+                {
+                    "name": "Listar Héroes",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/heroes",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "heroes"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Listar Héroes Vivos (Opcional)",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/heroes/alive",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "heroes",
+                                "alive"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Crear Héroe",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "var jsonData = pm.response.json();",
+                                    "pm.environment.set(\"hero_id\", jsonData.id);",
+                                    "pm.test(\"Status code is 201\", function () { pm.response.to.have.status(201); });"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"name\": \"Héroe Test\",\n    \"race\": \"Elfo\",\n    \"rank\": \"Capitán\",\n    \"alive\": true,\n    \"realm_id\": {{realm_id}}\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/heroes",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "heroes"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Obtener Héroe",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/heroes/{{hero_id}}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "heroes",
+                                "{{hero_id}}"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Ver Artefactos de un Héroe (Opcional)",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/heroes/{{hero_id}}/artifacts",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "heroes",
+                                "{{hero_id}}",
+                                "artifacts"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "4. Criaturas",
+            "item": [
+                {
+                    "name": "Listar Criaturas",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/creatures",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "creatures"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Crear Criatura",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "var jsonData = pm.response.json();",
+                                    "pm.environment.set(\"creature_id\", jsonData.id);",
+                                    "pm.test(\"Status code is 201\", function () { pm.response.to.have.status(201); });"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"name\": \"Monstruo Test\",\n    \"species\": \"Orco\",\n    \"threat_level\": 9,\n    \"region_id\": {{region_id}}\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/creatures",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "creatures"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Listar Criaturas Peligrosas (Opcional)",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/creatures/dangerous?level=5",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "creatures",
+                                "dangerous"
+                            ],
+                            "query": [
+                                {
+                                    "key": "level",
+                                    "value": "5"
+                                }
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "5. Artefactos",
+            "item": [
+                {
+                    "name": "Listar Artefactos",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/artifacts",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "artifacts"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Listar Artefactos Top (Opcional)",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/artifacts/top",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "artifacts",
+                                "top"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Crear Artefacto",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "var jsonData = pm.response.json();",
+                                    "pm.environment.set(\"artifact_id\", jsonData.id);",
+                                    "pm.test(\"Status code is 201\", function () { pm.response.to.have.status(201); });"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"name\": \"Anillo de Poder\",\n    \"type\": \"Anillo\",\n    \"power_level\": 95,\n    \"description\": \"Muy poderoso\",\n    \"origin_realm_id\": {{realm_id}}\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/artifacts",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "artifacts"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Ver Héroes de un Artefacto (Opcional)",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/artifacts/{{artifact_id}}/heroes",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "artifacts",
+                                "{{artifact_id}}",
+                                "heroes"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "6. Relaciones N:N (Opcionales)",
+            "item": [
+                {
+                    "name": "Asignar Artefacto a Héroe",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"artifact_id\": {{artifact_id}},\n    \"hero_id\": {{hero_id}}\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/artifact-hero",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "artifact-hero"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Desasignar Artefacto de Héroe",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"artifact_id\": {{artifact_id}},\n    \"hero_id\": {{hero_id}}\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/artifact-hero",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "artifact-hero"
+                            ]
+                        }
+                    }
+                }
+            ]
+        }
+    ],
+    "variable": [
+        {
+            "key": "base_url",
+            "value": "http://localhost:8000/api",
+            "type": "string"
+        }
+    ]
+}
