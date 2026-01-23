@@ -70,4 +70,10 @@ class CreatureController extends Controller
 
         return response()->json(['message' => 'Criatura eliminada']);
     }
+
+    public function getDangerous(Request $request)
+    {
+        $level = $request->query('level', 8); // Default to 8 if not specified
+        return response()->json(Creature::where('threat_level', '>=', $level)->get());
+    }
 }

@@ -12,7 +12,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('species');
-            $table->integer('threat_level')->unsigned();
+            $table->unsignedTinyInteger('threat_level');
             $table->foreignId('region_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });

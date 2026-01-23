@@ -89,4 +89,42 @@ class ArtifactController extends Controller
 
         return response()->json(['message' => 'Artefacto eliminado']);
     }
+
+    public function getTop()
+    {
+        return response()->json(Artifact::where('power_level', '>', 90)->get());
+    }
+
+    public function getHeroes(string $id)
+    {
+        $artifact = Artifact::find($id);
+        if (!$artifact) return response()->json(['message' => 'Artefacto no encontrado'], 404);
+        return response()->json($artifact->heroes);
+    }
+
+    public function attachHero(Request $request)
+    {
+        $request->validate([
+            'artifact_id' => 'required|exists:artifacts,id',
+            'hero_id' => 'required|exists:heroes,id'
+        ]);
+
+        $artifact = Artifact::find($request->artifact_id);
+        $artifact->heroes()->syncWithoutDetaching([$request->hero_id]);
+
+        return response()->json(['message' => 'Artefacto asignado al héroe']);
+    }
+
+    public function detachHero(Request $request)
+    {
+        $request->validate([
+            'artifact_id' => 'required|exists:artifacts,id',
+            'hero_id' => 'required|exists:heroes,id'
+        ]);
+
+        $artifact = Artifact::find($request->artifact_id);
+        $artifact->heroes()->detach($request->hero_id);
+
+        return response()->json(['message' => 'Artefacto retirado del héroe']);
+    }
 }

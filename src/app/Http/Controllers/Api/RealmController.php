@@ -29,7 +29,7 @@ class RealmController extends Controller
 
     public function show(string $id)
     {
-        $realm = Realm::with(['region', 'heroes'])->find($id);
+        $realm = Realm::with(['region', 'heroes', 'artifacts'])->find($id);
 
         if (!$realm) {
             return response()->json(['message' => 'Reino no encontrado'], 404);
@@ -96,5 +96,12 @@ class RealmController extends Controller
                 'regional_threat_avg' => round($avgThreat, 2)
             ]
         ]);
+    }
+
+    public function getHeroes(string $id)
+    {
+        $realm = Realm::find($id);
+        if (!$realm) return response()->json(['message' => 'Reino no encontrado'], 404);
+        return response()->json($realm->heroes);
     }
 }

@@ -13,7 +13,7 @@ class DatabaseSeeder extends Seeder
     {
         // Aquí llamamos a nuestro seeder de personajes
         $this->call([
-            CharacterSeeder::class,
+            TierraMediaSeeder::class,
         ]);
     }
 }

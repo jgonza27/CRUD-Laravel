@@ -64,4 +64,11 @@ class RegionController extends Controller
 
         return response()->json(['message' => 'Región eliminada']);
     }
+
+    public function getCreatures(string $id)
+    {
+        $region = Region::find($id);
+        if (!$region) return response()->json(['message' => 'Región no encontrada'], 404);
+        return response()->json($region->creatures);
+    }
 }

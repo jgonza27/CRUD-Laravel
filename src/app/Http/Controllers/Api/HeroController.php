@@ -87,4 +87,16 @@ class HeroController extends Controller
 
         return response()->json($query->with('realm')->get());
     }
+
+    public function getAlive()
+    {
+        return response()->json(Hero::where('alive', true)->get());
+    }
+
+    public function getArtifacts(string $id)
+    {
+        $hero = Hero::find($id);
+        if (!$hero) return response()->json(['message' => 'Héroe no encontrado'], 404);
+        return response()->json($hero->artifacts);
+    }
 }

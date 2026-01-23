@@ -12,7 +12,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('race');
-            $table->string('rank');
+            $table->string('rank')->nullable();
             $table->boolean('alive')->default(true);
             $table->foreignId('realm_id')->constrained()->onDelete('cascade');
             $table->timestamps();

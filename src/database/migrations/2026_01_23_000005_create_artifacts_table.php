@@ -12,7 +12,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('type');
-            $table->integer('power_level')->unsigned();
+            $table->unsignedTinyInteger('power_level');
             $table->text('description')->nullable();
             $table->foreignId('origin_realm_id')->constrained('realms')->onDelete('cascade');
             $table->timestamps();
