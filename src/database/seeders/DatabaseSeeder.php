@@ -11,9 +11,13 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Aquí llamamos a nuestro seeder de personajes
         $this->call([
-            TierraMediaSeeder::class,
+            RegionSeeder::class,
+            RealmSeeder::class,
+            HeroeSeeder::class,
+            CreatureSeeder::class,
+            ArtifactSeeder::class,
+            ArtifactHeroSeeder::class,
         ]);
     }
 }
