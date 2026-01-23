@@ -70,4 +70,31 @@ class RealmController extends Controller
 
         return response()->json(['message' => 'Reino eliminado']);
     }
+
+    public function stats(string $id)
+    {
+        $realm = Realm::with(['heroes', 'artifacts', 'region.creatures'])->find($id);
+
+        if (!$realm) {
+            return response()->json(['message' => 'Reino no encontrado'], 404);
+        }
+
+        $heroCount = $realm->heroes->where('alive', true)->count();
+        $totalArtifactPower = $realm->artifacts->sum('power_level');
+        
+        // Calculate average threat in the region
+        $avgThreat = 0;
+        if ($realm->region && $realm->region->creatures->count() > 0) {
+            $avgThreat = $realm->region->creatures->avg('threat_level');
+        }
+
+        return response()->json([
+            'realm_name' => $realm->name,
+            'stats' => [
+                'living_heroes' => $heroCount,
+                'total_artifact_power' => $totalArtifactPower,
+                'regional_threat_avg' => round($avgThreat, 2)
+            ]
+        ]);
+    }
 }

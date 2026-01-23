@@ -10,6 +10,9 @@ Route::get('/user', function (Request $request) {
 
 
 // Definimos las rutas CRUD
+Route::post('/battles', [\App\Http\Controllers\Api\BattleController::class, 'battle']);
+Route::get('/realms/{id}/stats', [\App\Http\Controllers\Api\RealmController::class, 'stats']);
+
 Route::apiResource('regions', \App\Http\Controllers\Api\RegionController::class);
 Route::apiResource('realms', \App\Http\Controllers\Api\RealmController::class);
 Route::get('/heroes/search', [\App\Http\Controllers\Api\HeroController::class, 'search']);
