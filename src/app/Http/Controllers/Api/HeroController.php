@@ -72,4 +72,19 @@ class HeroController extends Controller
 
         return response()->json(['message' => 'Héroe eliminado']);
     }
+
+    public function search(Request $request)
+    {
+        $query = Hero::query();
+
+        if ($request->has('name')) {
+            $query->where('name', 'like', '%' . $request->name . '%');
+        }
+
+        if ($request->has('rank')) {
+            $query->where('rank', $request->rank);
+        }
+
+        return response()->json($query->with('realm')->get());
+    }
 }
