@@ -11,7 +11,7 @@ class Artifact extends Model
 
     protected $fillable = ['name', 'type', 'power_level', 'description', 'origin_realm_id'];
 
-    public function originRealm()
+    public function origin_realm()
     {
         return $this->belongsTo(Realm::class, 'origin_realm_id');
     }

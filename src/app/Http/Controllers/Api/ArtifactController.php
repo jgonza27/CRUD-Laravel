@@ -10,7 +10,7 @@ class ArtifactController extends Controller
 {
     public function index()
     {
-        return response()->json(Artifact::with(['originRealm', 'heroes'])->get());
+        return response()->json(Artifact::with(['origin_realm', 'heroes'])->get());
     }
 
     public function store(Request $request)
@@ -31,12 +31,12 @@ class ArtifactController extends Controller
             $artifact->heroes()->sync($request->hero_ids);
         }
 
-        return response()->json($artifact->load(['originRealm', 'heroes']), 201);
+        return response()->json($artifact->load(['origin_realm', 'heroes']), 201);
     }
 
     public function show(string $id)
     {
-        $artifact = Artifact::with(['originRealm', 'heroes'])->find($id);
+        $artifact = Artifact::with(['origin_realm', 'heroes'])->find($id);
 
         if (!$artifact) {
             return response()->json(['message' => 'Artefacto no encontrado'], 404);
@@ -74,7 +74,7 @@ class ArtifactController extends Controller
             $artifact->heroes()->sync($request->hero_ids);
         }
 
-        return response()->json($artifact->load(['originRealm', 'heroes']));
+        return response()->json($artifact->load(['origin_realm', 'heroes']));
     }
 
     public function destroy(string $id)

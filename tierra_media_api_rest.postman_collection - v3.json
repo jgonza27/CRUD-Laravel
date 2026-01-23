@@ -1,0 +1,409 @@
+{
+   "info":{
+      "name":"Tierra Media API REST - CRUD completo seguro",
+      "description":"POST, GET, PUT y DELETE en orden seguro para todos los recursos",
+      "schema":"https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+   },
+   "variable":[
+      {
+         "key":"base_url",
+         "value":"http://localhost/api"
+      },
+      {
+         "key":"region_id",
+         "value":""
+      },
+      {
+         "key":"realm_id",
+         "value":""
+      },
+      {
+         "key":"hero_id",
+         "value":""
+      },
+      {
+         "key":"creature_id",
+         "value":""
+      },
+      {
+         "key":"artifact_id",
+         "value":""
+      }
+   ],
+   "item":[
+      {
+         "name":"POST Region",
+         "request":{
+            "method":"POST",
+            "header":[
+               {
+                  "key":"Content-Type",
+                  "value":"application/json"
+               }
+            ],
+            "url":"{{base_url}}/regions",
+            "body":{
+               "mode":"raw",
+               "raw":"{ \"name\": \"Region_Test\" }"
+            }
+         },
+         "event":[
+            {
+               "listen":"test",
+               "script":{
+                  "exec":[
+                     "pm.expect(pm.response.code).to.be.oneOf([200,201]);",
+                     "pm.environment.set('region_id', pm.response.json().id);"
+                  ]
+               }
+            }
+         ]
+      },
+      {
+         "name":"GET Region by ID",
+         "request":{
+            "method":"GET",
+            "url":"{{base_url}}/regions/{{region_id}}"
+         }
+      },
+      {
+         "name":"GET Regions",
+         "request":{
+            "method":"GET",
+            "url":"{{base_url}}/regions"
+         }
+      },
+      {
+         "name":"POST Realm",
+         "request":{
+            "method":"POST",
+            "header":[
+               {
+                  "key":"Content-Type",
+                  "value":"application/json"
+               }
+            ],
+            "url":"{{base_url}}/realms",
+            "body":{
+               "mode":"raw",
+               "raw":"{ \"name\": \"Realm_Test\", \"ruler\": \"King\", \"alignment\": \"Neutral\", \"region_id\": {{region_id}} }"
+            }
+         },
+         "event":[
+            {
+               "listen":"test",
+               "script":{
+                  "exec":[
+                     "pm.expect(pm.response.code).to.be.oneOf([200,201]);",
+                     "pm.environment.set('realm_id', pm.response.json().id);"
+                  ]
+               }
+            }
+         ]
+      },
+      {
+         "name":"GET Realm by ID",
+         "request":{
+            "method":"GET",
+            "url":"{{base_url}}/realms/{{realm_id}}"
+         },
+         "event":[
+            {
+               "listen":"test",
+               "script":{
+                  "exec":[
+                     "// Parsear la respuesta",
+                     "const realm = pm.response.json();",
+                     "// Validar campos básicos del reino",
+                     "pm.test('Realm tiene id, name y alignment', () => {",
+                     "    pm.expect(realm.id).to.eql(parseInt(pm.variables.get('realm_id')));",
+                     "    pm.expect(realm.name).to.be.a('string').that.is.not.empty;",
+                     "    pm.expect(realm.ruler).to.be.a('string').that.is.not.empty;",
+                     "    pm.expect(realm.alignment).to.be.oneOf(['Bien','Mal','Neutral']);",
+                     "});",
+                     "// Validar relación con region",
+                     "pm.test('Realm tiene region válida', () => {",
+                     "    pm.expect(realm.region).to.be.an('object');",
+                     "    pm.expect(realm.region.id).to.be.a('number');",
+                     "    pm.expect(realm.region.name).to.be.a('string').that.is.not.empty;",
+                     "});",
+                     "// Validar héroes relacionados si existen",
+                     "pm.test('Realm tiene heroes válidos', () => {",
+                     "    pm.expect(realm.heroes).to.be.an('array');",
+                     "    realm.heroes.forEach(hero => {",
+                     "        pm.expect(hero.id).to.be.a('number');",
+                     "        pm.expect(hero.name).to.be.a('string').that.is.not.empty;",
+                     "        pm.expect(hero.race).to.be.a('string');",
+                     "        pm.expect(hero.rank).to.be.a('string');",
+                     "        pm.expect(hero.alive).to.be.a('boolean');",
+                     "    });",
+                     "});"
+                  ]
+               }
+            }
+         ]
+      },
+      {
+         "name":"GET Realms",
+         "request":{
+            "method":"GET",
+            "url":"{{base_url}}/realms"
+         }
+      },
+      {
+         "name":"POST Hero",
+         "request":{
+            "method":"POST",
+            "header":[
+               {
+                  "key":"Content-Type",
+                  "value":"application/json"
+               }
+            ],
+            "url":"{{base_url}}/heroes",
+            "body":{
+               "mode":"raw",
+               "raw":"{ \"name\": \"Hero_Test\", \"race\": \"Humano\", \"rank\": \"Explorador\", \"realm_id\": {{realm_id}}, \"alive\": true }"
+            }
+         },
+         "event":[
+            {
+               "listen":"test",
+               "script":{
+                  "exec":[
+                     "pm.expect(pm.response.code).to.be.oneOf([200,201]);",
+                     "pm.environment.set('hero_id', pm.response.json().id);"
+                  ]
+               }
+            }
+         ]
+      },
+      {
+         "name":"GET Hero by ID",
+         "request":{
+            "method":"GET",
+            "url":"{{base_url}}/heroes/{{hero_id}}"
+         },
+         "event":[
+            {
+               "listen":"test",
+               "script":{
+                  "exec":[
+                     "// Parsear la respuesta",
+                     "const hero = pm.response.json();",
+                     "// Validar campos básicos",
+                     "pm.test('Hero tiene id y name', () => {",
+                     "    pm.expect(hero.id).to.eql(parseInt(pm.variables.get('hero_id')));",
+                     "    pm.expect(hero.name).to.be.a('string').that.is.not.empty;",
+                     "    pm.expect(hero.race).to.be.a('string');",
+                     "    pm.expect(hero.rank).to.be.a('string');",
+                     "    pm.expect(hero.alive).to.be.a('boolean');",
+                     "});",
+                     "// Validar relación con realm",
+                     "pm.test('Hero tiene realm válido', () => {",
+                     "    pm.expect(hero.realm).to.be.an('object');",
+                     "    pm.expect(hero.realm.id).to.eql(parseInt(pm.variables.get('realm_id')));",
+                     "    pm.expect(hero.realm.name).to.be.a('string').that.is.not.empty;",
+                     "    pm.expect(hero.realm.alignment).to.be.oneOf(['Bien','Mal','Neutral']);",
+                     "});",
+                     "// Validar artifacts relacionados si existen",
+                     "pm.test('Hero tiene artifacts válidos', () => {",
+                     "    pm.expect(hero.artifacts).to.be.an('array');",
+                     "    hero.artifacts.forEach(artifact => {",
+                     "        pm.expect(artifact.id).to.be.a('number');",
+                     "        pm.expect(artifact.name).to.be.a('string').that.is.not.empty;",
+                     "        pm.expect(artifact.power_level).to.be.within(1, 100);",
+                     "    });",
+                     "});"
+                  ]
+               }
+            }
+         ]
+      },
+      {
+         "name":"GET Heroes",
+         "request":{
+            "method":"GET",
+            "url":"{{base_url}}/heroes"
+         }
+      },
+      {
+         "name":"POST Creature",
+         "request":{
+            "method":"POST",
+            "header":[
+               {
+                  "key":"Content-Type",
+                  "value":"application/json"
+               }
+            ],
+            "url":"{{base_url}}/creatures",
+            "body":{
+               "mode":"raw",
+               "raw":"{ \"name\": \"Creature_Test\", \"species\": \"Bestia\", \"threat_level\": 5, \"region_id\": {{region_id}} }"
+            }
+         },
+         "event":[
+            {
+               "listen":"test",
+               "script":{
+                  "exec":[
+                     "pm.expect(pm.response.code).to.be.oneOf([200,201]);",
+                     "pm.environment.set('creature_id', pm.response.json().id);"
+                  ]
+               }
+            }
+         ]
+      },
+      {
+         "name":"GET Creature by ID",
+         "request":{
+            "method":"GET",
+            "url":"{{base_url}}/creatures/{{creature_id}}"
+         },
+         "event":[
+            {
+               "listen":"test",
+               "script":{
+                  "exec":[
+                     "// Parsear la respuesta",
+                     "const creature = pm.response.json();",
+                     "// Validar campos básicos de la criatura",
+                     "pm.test('Creature tiene id, name, species y threat_level', () => {",
+                     "    pm.expect(creature.id).to.eql(parseInt(pm.variables.get('creature_id')));",
+                     "    pm.expect(creature.name).to.be.a('string').that.is.not.empty;",
+                     "    pm.expect(creature.species).to.be.a('string').that.is.not.empty;",
+                     "    pm.expect(creature.threat_level).to.be.within(1, 10);",
+                     "});",
+                     "// Validar relación con region",
+                     "pm.test('Creature tiene region válida', () => {",
+                     "    pm.expect(creature.region).to.be.an('object');",
+                     "    pm.expect(creature.region.id).to.eql(parseInt(pm.variables.get('region_id')));",
+                     "    pm.expect(creature.region.name).to.be.a('string').that.is.not.empty;",
+                     "});"
+                  ]
+               }
+            }
+         ]
+      },
+      {
+         "name":"GET Creatures",
+         "request":{
+            "method":"GET",
+            "url":"{{base_url}}/creatures"
+         }
+      },
+      {
+         "name":"POST Artifact",
+         "request":{
+            "method":"POST",
+            "header":[
+               {
+                  "key":"Content-Type",
+                  "value":"application/json"
+               }
+            ],
+            "url":"{{base_url}}/artifacts",
+            "body":{
+               "mode":"raw",
+               "raw":"{ \"name\": \"Artifact_Test\", \"type\": \"Espada\", \"origin_realm_id\": {{realm_id}}, \"power_level\": 75, \"description\": \"Espada legendaria\", \"hero_ids\": [{{hero_id}}]}"
+            }
+         },
+         "event":[
+            {
+               "listen":"test",
+               "script":{
+                  "exec":[
+                     "pm.expect(pm.response.code).to.be.oneOf([200,201]);",
+                     "pm.environment.set('artifact_id', pm.response.json().id);"
+                  ]
+               }
+            }
+         ]
+      },
+      {
+         "name":"GET Artifact by ID",
+         "request":{
+            "method":"GET",
+            "url":"{{base_url}}/artifacts/{{artifact_id}}"
+         },
+         "event":[
+            {
+               "listen":"test",
+               "script":{
+                  "exec":[
+                     "// Parsear la respuesta",
+                     "const artifact = pm.response.json();",
+                     "// Validar campos básicos del artefacto",
+                     "pm.test('Artifact tiene id, name, type y power_level', () => {",
+                     "    pm.expect(artifact.id).to.eql(parseInt(pm.variables.get('artifact_id')));",
+                     "    pm.expect(artifact.name).to.be.a('string').that.is.not.empty;",
+                     "    pm.expect(artifact.type).to.be.a('string').that.is.not.empty;",
+                     "    pm.expect(artifact.power_level).to.be.within(1, 100);",
+                     "    if (artifact.description) pm.expect(artifact.description).to.be.a('string');",
+                     "});",
+                     "// Validar relación con realm de origen",
+                     "pm.test('Artifact tiene origin realm válido', () => {",
+                     "    pm.expect(artifact.origin_realm).to.be.an('object');",
+                     "    pm.expect(artifact.origin_realm.id).to.eql(parseInt(pm.variables.get('realm_id')));",
+                     "    pm.expect(artifact.origin_realm.name).to.be.a('string').that.is.not.empty;",
+                     "});",
+                     "// Validar héroes que poseen el artefacto",
+                     "pm.test('Artifact tiene heroes válidos', () => {",
+                     "    pm.expect(artifact.heroes).to.be.an('array');",
+                     "    artifact.heroes.forEach(hero => {",
+                     "        pm.expect(hero.id).to.be.a('number');",
+                     "        pm.expect(hero.name).to.be.a('string').that.is.not.empty;",
+                     "        pm.expect(hero.rank).to.be.a('string');",
+                     "        pm.expect(hero.alive).to.be.a('boolean');",
+                     "    });",
+                     "});"
+                  ]
+               }
+            }
+         ]
+      },
+      {
+         "name":"GET Artifacts",
+         "request":{
+            "method":"GET",
+            "url":"{{base_url}}/artifacts"
+         }
+      },
+      {
+         "name":"DELETE Artifact",
+         "request":{
+            "method":"DELETE",
+            "url":"{{base_url}}/artifacts/{{artifact_id}}"
+         }
+      },
+      {
+         "name":"DELETE Creature",
+         "request":{
+            "method":"DELETE",
+            "url":"{{base_url}}/creatures/{{creature_id}}"
+         }
+      },
+      {
+         "name":"DELETE Hero",
+         "request":{
+            "method":"DELETE",
+            "url":"{{base_url}}/heroes/{{hero_id}}"
+         }
+      },
+      {
+         "name":"DELETE Realm",
+         "request":{
+            "method":"DELETE",
+            "url":"{{base_url}}/realms/{{realm_id}}"
+         }
+      },
+      {
+         "name":"DELETE Region",
+         "request":{
+            "method":"DELETE",
+            "url":"{{base_url}}/regions/{{region_id}}"
+         }
+      }
+   ]
+}
