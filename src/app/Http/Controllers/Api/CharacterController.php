@@ -3,87 +3,71 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\Character;
+use App\Models\Realm;
 use Illuminate\Http\Request;
 
-class CharacterController extends Controller
+class RealmController extends Controller
 {
-    // Listar todos los personajes
-    public function index(Request $request)
-{
-    $query = Character::query();
-
-    // Si la URL trae ?race=Elf, filtramos
-    if ($request->has('race')) {
-        $query->where('race', $request->input('race'));
+    public function index()
+    {
+        return response()->json(Realm::with('region')->get());
     }
 
-    return response()->json($query->paginate(15));
-}
-
-    // Crear un nuevo personaje
     public function store(Request $request)
     {
-        // Validamos que al menos tenga nombre y raza
         $request->validate([
             'name' => 'required|string|max:255',
-            'race' => 'required|string|max:255',
+            'ruler' => 'required|string|max:255',
+            'alignment' => 'required|in:Bien,Mal,Neutral',
+            'region_id' => 'required|exists:regions,id',
         ]);
 
-        $character = Character::create($request->all());
+        $realm = Realm::create($request->all());
 
-        return response()->json([
-            'message' => '¡Personaje creado en la Tierra Media!',
-            'data' => $character
-        ], 201);
+        return response()->json($realm, 201);
     }
 
-    // Mostrar un personaje concreto
     public function show(string $id)
     {
-        $character = Character::find($id);
+        $realm = Realm::with(['region', 'heroes'])->find($id);
 
-        if (!$character) {
-            return response()->json(['message' => 'Personaje no encontrado'], 404);
+        if (!$realm) {
+            return response()->json(['message' => 'Reino no encontrado'], 404);
         }
 
-        return response()->json($character);
+        return response()->json($realm);
     }
 
-   
     public function update(Request $request, string $id)
     {
-        $character = Character::find($id);
+        $realm = Realm::find($id);
 
-        if (!$character) {
-            return response()->json(['message' => 'Personaje no encontrado'], 404);
+        if (!$realm) {
+            return response()->json(['message' => 'Reino no encontrado'], 404);
         }
 
-        // Validar antes de actualizar
         $request->validate([
             'name' => 'sometimes|required|string|max:255',
-            'race' => 'sometimes|required|string|max:255',
+            'ruler' => 'sometimes|required|string|max:255',
+            'alignment' => 'sometimes|required|in:Bien,Mal,Neutral',
+            'region_id' => 'sometimes|required|exists:regions,id',
         ]);
 
-        $character->update($request->all());
+        $realm->update($request->all());
 
-        return response()->json([
-            'message' => 'Personaje actualizado',
-            'data' => $character
-        ]);
+        return response()->json($realm);
     }
 
-    // Eliminar un personaje
     public function destroy(string $id)
     {
-        $character = Character::find($id);
+        $realm = Realm::find($id);
 
-        if (!$character) {
-            return response()->json(['message' => 'Personaje no encontrado'], 404);
+        if (!$realm) {
+            return response()->json(['message' => 'Reino no encontrado'], 404);
         }
 
-        $character->delete();
+        $realm->delete();
 
-        return response()->json(['message' => 'Personaje eliminado']);
+        return response()->json(['message' => 'Reino eliminado']);
     }
 }
