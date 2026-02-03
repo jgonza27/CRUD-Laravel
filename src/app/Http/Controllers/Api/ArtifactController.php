@@ -42,7 +42,6 @@ class ArtifactController extends Controller
             return response()->json(['message' => 'Artefacto no encontrado'], 404);
         }
 
-        // Transformar para que coincida con el formato esperado por Postman
         $response = $artifact->toArray();
         $response['origin_realm'] = $response['origin_realm'] ?? null;
         unset($response['origin_realm_id']);
