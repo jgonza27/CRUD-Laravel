@@ -19,18 +19,15 @@ class BattleController extends Controller
         $hero = Hero::with('artifacts')->find($request->hero_id);
         $creature = Creature::find($request->creature_id);
 
-        // Calculate Hero Power
         $baseHeroPower = $this->getRankPower($hero->rank);
         $artifactBonus = $hero->artifacts->sum('power_level');
         $heroRoll = rand(1, 20);
         $totalHeroPower = $baseHeroPower + $artifactBonus + $heroRoll;
 
-        // Calculate Creature Power
-        $creatureBasePower = $creature->threat_level * 10; // Threat 1-10 scales to 10-100
+        $creatureBasePower = $creature->threat_level * 10; 
         $creatureRoll = rand(1, 20);
         $totalCreaturePower = $creatureBasePower + $creatureRoll;
 
-        // Determine Winner
         if ($totalHeroPower >= $totalCreaturePower) {
             $winner = 'Hero';
             $message = "{$hero->name} derrota a {$creature->name}!";
@@ -62,7 +59,6 @@ class BattleController extends Controller
 
     private function getRankPower($rank)
     {
-        // Simple mapping of ranks to power levels
         $ranks = [
             'Guerrero' => 50,
             'Mago' => 45,
@@ -71,6 +67,6 @@ class BattleController extends Controller
             'Hobbit' => 10
         ];
 
-        return $ranks[$rank] ?? 20; // Default power
+        return $ranks[$rank] ?? 20; 
     }
 }
