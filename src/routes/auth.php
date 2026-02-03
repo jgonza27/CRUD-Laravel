@@ -23,7 +23,6 @@ Route::middleware('guest')->group(function () {
 
     Route::post('login', [AuthenticatedSessionController::class, 'store']);
 
-    // Google OAuth
     Route::get('auth/google', [GoogleController::class, 'redirect'])->name('auth.google');
     Route::get('auth/google/callback', [GoogleController::class, 'callback'])->name('auth.google.callback');
 

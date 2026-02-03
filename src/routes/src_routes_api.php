@@ -13,10 +13,8 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-// Rutas CRUD para personajes (existente)
 Route::apiResource('characters', CharacterController::class);
 
-// Rutas CRUD para la colección de Postman "Tierra Media"
 Route::apiResource('regions', RegionController::class);
 Route::apiResource('realms', RealmController::class);
 Route::apiResource('heroes', HeroController::class);

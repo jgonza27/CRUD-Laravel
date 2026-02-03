@@ -9,7 +9,6 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 
-// Definimos las rutas CRUD
 Route::post('/battles', [\App\Http\Controllers\Api\BattleController::class, 'battle']);
 Route::get('/realms/{id}/stats', [\App\Http\Controllers\Api\RealmController::class, 'stats']);
 
