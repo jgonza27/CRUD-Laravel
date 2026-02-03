@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\DB;
 
 class RealmSeeder extends Seeder {
     public function run() {
-        // IDs: Eriador=1, Rhovanion=2, Mordor=3, Gondor=4, Rohan=5
         DB::table('realms')->insert([
             ['name' => 'Gondor', 'ruler' => 'Aragorn', 'alignment' => 'Bien', 'region_id' => 4],
             ['name' => 'Rohan', 'ruler' => 'Éomer', 'alignment' => 'Bien', 'region_id' => 5],

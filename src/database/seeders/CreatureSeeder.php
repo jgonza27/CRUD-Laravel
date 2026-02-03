@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\DB;
 
 class CreatureSeeder extends Seeder {
     public function run() {
-        // Region IDs: Eriador=1, Rhovanion=2, Mordor=3, Gondor=4, Rohan=5
         DB::table('creatures')->insert([
             ['name' => 'Balrog', 'species' => 'Demonio', 'threat_level' => 10, 'region_id' => 2],
             ['name' => 'Nazgûl', 'species' => 'Espectro', 'threat_level' => 9, 'region_id' => 3],

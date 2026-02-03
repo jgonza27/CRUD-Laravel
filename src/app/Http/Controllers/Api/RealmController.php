@@ -82,7 +82,6 @@ class RealmController extends Controller
         $heroCount = $realm->heroes->where('alive', true)->count();
         $totalArtifactPower = $realm->artifacts->sum('power_level');
         
-        // Calculate average threat in the region
         $avgThreat = 0;
         if ($realm->region && $realm->region->creatures->count() > 0) {
             $avgThreat = $realm->region->creatures->avg('threat_level');
